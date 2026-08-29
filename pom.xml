@@ -28,7 +28,9 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -43,12 +45,21 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>1.6.3</version>
 		</dependency>
+
+			<!-- для підтягування скл запитів з бд мігратіон при запуску  -->
+
+
+		<!--                -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
