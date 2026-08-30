@@ -8,10 +8,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class JacksonConfig {
-    @Bean
-    public ObjectMapper getObjectMapper() {
-        return new ObjectMapper();
-    }
+//    @Bean
+//    public ObjectMapper getObjectMapper() {
+//        return new ObjectMapper();
+//    }
 
     @Bean
     public WebClient webClient() {

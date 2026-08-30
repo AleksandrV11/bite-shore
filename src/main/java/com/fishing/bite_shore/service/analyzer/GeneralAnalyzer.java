@@ -59,7 +59,7 @@ public class GeneralAnalyzer {
         } else if (season == Season.AUTUMN) {
             result.append("восені. Риба починає скочуватися на глибини, але в сонячні дні можливі виходи на неглибокі" + " ділянки.\n");
         } else if (season == Season.LATE_AUTUMN) {
-            result.append("пізньої осені.\n");
+            result.append("пізньої осені. Риба скотилась на глибину.\n");
         } else {
             result.append("період не аналізується.\n");
         }

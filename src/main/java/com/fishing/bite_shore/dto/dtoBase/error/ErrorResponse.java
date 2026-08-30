@@ -1,4 +1,7 @@
 package com.fishing.bite_shore.dto.dtoBase.error;
 
-public class ErrorResponse {
+public record ErrorResponse(
+        int status,
+        String message
+) {
 }

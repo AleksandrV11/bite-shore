@@ -1,0 +1,9 @@
+POST http://localhost:8080/api/fishing/analyze
+Content-Type: application/json
+
+{
+  "latitude": 48.384756,
+  "longitude": 28.691357,
+  "city": null,
+  "fishingDate": "2026-09-05"
+}

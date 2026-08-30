@@ -1,4 +1,8 @@
 package com.fishing.bite_shore.dto.dtoBase;
 
-public class FishingAnalysisResponse {
+import java.time.LocalDate;
+
+public record FishingAnalysisResponse(LocalDate fishingDate,
+                                      String recommendation) {
+
 }

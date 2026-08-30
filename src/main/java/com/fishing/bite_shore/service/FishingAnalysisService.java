@@ -1,6 +1,7 @@
 package com.fishing.bite_shore.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fishing.bite_shore.dto.dtoBase.FishingAnalysisResponse;
 import com.fishing.bite_shore.entity.WeatherLocationEntity;
 import com.fishing.bite_shore.model.WeatherProcessResult;
 import com.fishing.bite_shore.model.WeatherSnapshot;
@@ -42,11 +43,17 @@ public class FishingAnalysisService {
     private final WeatherLocationRepository weatherLocationRepository;
 
 
-    public void analyze(double lat, double lon, String city, LocalDate localDate) throws JsonProcessingException {
+    public FishingAnalysisResponse analyze(Double lat, Double lon, String city, LocalDate localDate) throws JsonProcessingException {
 
         LocalDateTime dateTime = localDate.atStartOfDay();
         WeatherProcessResult processResult;
-        if (lat == 0 && lon == 0) {
+        if (lat == null || lon == null || lat == 0 || lon == 0) {
+
+            if (city == null || city.isBlank()) {
+                throw new IllegalArgumentException(
+                        "Необхідно вказати місто, якщо координати не задані"
+                );
+            }
             processResult = weatherOrchestratorService.getAndSaveByCity(city);
         } else {
             processResult = weatherOrchestratorService.getAndSaveByCoord(lat, lon);
@@ -105,15 +112,15 @@ public class FishingAnalysisService {
                         localDate
                 );
         // Загальний аналіз
-        StringBuilder result =
-                generalAnalyzer.analyzer(
+        String result =
+                (generalAnalyzer.analyzer(
                         pressure,
                         temperature,
                         wind,
                         precipitation,
                         dateTime
-                );
+                )).toString();
+        return new FishingAnalysisResponse(localDate, result);
 
-        System.out.println(result);
     }
 }
