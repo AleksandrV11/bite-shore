@@ -27,7 +27,7 @@ public class WeatherOrchestratorService {
     public WeatherProcessResult getAndSaveByCity(String city) throws JsonProcessingException {
 
         DTOBase dto = weatherService.getParsDTOCity(city);
-     //   System.out.println("CITY DTO = " + dto);
+        System.out.println("CITY DTO = " + dto);
         WeatherLocationEntity location = facadeService.buildWeather(dto);
         //додаємо висоту
         fillElevation(location);

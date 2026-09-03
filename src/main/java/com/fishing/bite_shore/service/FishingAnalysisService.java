@@ -46,6 +46,17 @@ public class FishingAnalysisService {
     public FishingAnalysisResponse analyze(Double lat, Double lon, String city, LocalDate localDate) throws JsonProcessingException {
 
         LocalDateTime dateTime = localDate.atStartOfDay();
+
+        if (localDate.isAfter(LocalDate.now().plusDays(9))) {
+            throw new IllegalArgumentException(
+                    "Дата рибалки не може бути більше ніж на 9 днів вперед"
+            );
+        }
+        if (localDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException(
+                    "Дата рибалки не може бути в минулому"
+            );
+        }
         WeatherProcessResult processResult;
         if (lat == null || lon == null || lat == 0 || lon == 0) {
 
