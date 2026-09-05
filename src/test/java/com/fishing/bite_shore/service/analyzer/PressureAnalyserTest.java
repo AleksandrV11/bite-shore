@@ -28,12 +28,6 @@ public class PressureAnalyserTest {
                         LocalDate.of(2026, 8, 24)));
         assertEquals("Немає даних тиску", exception.getMessage());
     }
-//if (lastPressure.isEmpty()) {
-//        level = NOT_DATA;
-//        movement = NOT_DATA;
-//        pressureTrend = NOT_DATA;
-//    } else {
-//    ...
 
     @Test
     void shouldReturnNotDataWhenPreviousDayPressureIsMissing() {
