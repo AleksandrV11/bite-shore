@@ -25,7 +25,7 @@ import java.util.List;
 
 @SpringBootApplication
 public class BiteShoreApplication {
-    ;
+
 
     public static void main(String[] args) throws JsonProcessingException {
 //        double lat = 10.7656; // проізвольно
@@ -41,15 +41,15 @@ public class BiteShoreApplication {
         ConfigurableApplicationContext context = SpringApplication.run(BiteShoreApplication.class, args);
         String nameCity = "ГОРОДКІВКА";
 
-        String date = "2026-09-01";
+        String date = "2026-09-29";
         System.out.println(" Дата риболовлі : " + date);
-        LocalDate fishingDate = LocalDate.of(2026, 9, 1);
+        LocalDate fishingDate = LocalDate.of(2026, 9, 29);
 
         FishingAnalysisService fishingAnalysisService =
                 context.getBean(FishingAnalysisService.class);
 
-        fishingAnalysisService.analyze(48.1280973, 34.0656450, nameCity, fishingDate);
 
+        System.out.println(fishingAnalysisService.analyze(48.1280973, 34.0656450, nameCity, fishingDate).recommendation());
 
     }
 
