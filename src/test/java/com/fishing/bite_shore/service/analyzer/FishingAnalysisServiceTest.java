@@ -172,7 +172,13 @@ public class FishingAnalysisServiceTest {
                 any(),
                 any(),
                 any(LocalDateTime.class)))
-                .thenReturn(new StringBuilder("Тестова рекомендація"));
+                .thenReturn(List.of(
+                        "Тестова рекомендація",
+                        "Тестовий тиск",
+                        "Тестова температура",
+                        "Тестовий вітер",
+                        "Тестові опади"
+                ));
 
         FishingAnalysisResponse response =
                 fishingAnalysisService.analyze(
@@ -185,7 +191,7 @@ public class FishingAnalysisServiceTest {
         assertNotNull(response);
         assertEquals(localDate, response.fishingDate());
         assertNotNull(response.recommendation());
-        assertFalse(response.recommendation().isBlank());
+        assertFalse(response.recommendation().isEmpty());
 
         verify(weatherOrchestratorService)
                 .getAndSaveByCity("Городківка");

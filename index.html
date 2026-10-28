@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bite Shore</title>
+</head>
+<body>
+
+<h1>Bite Shore</h1>
+
+<form id="fishing-form">
+
+    <label>
+        Місто:
+        <input type="text" id="city" value="Городківка">
+    </label>
+
+    <br><br>
+
+    <label>
+        Широта:
+        <input type="number" id="latitude" step="any" value="48.384756">
+    </label>
+
+    <br><br>
+
+    <label>
+        Довгота:
+        <input type="number" id="longitude" step="any" value="28.691357">
+    </label>
+
+    <br><br>
+
+    <label>
+        Дата рибалки:
+        <input type="date" id="fishingDate" value="2026-10-05">
+    </label>
+
+    <br><br>
+
+    <button type="submit">Проаналізувати</button>
+
+</form>
+
+<h2>Результат:</h2>
+
+<pre id="result"></pre>
+
+<script>
+    document.getElementById("fishing-form").addEventListener("submit", async function (event) {
+
+        event.preventDefault();
+
+        const request = {
+            latitude: Number(document.getElementById("latitude").value),
+            longitude: Number(document.getElementById("longitude").value),
+            city: document.getElementById("city").value,
+            fishingDate: document.getElementById("fishingDate").value
+        };
+
+        const resultElement = document.getElementById("result");
+
+        resultElement.textContent = "Аналізую...";
+
+        try {
+            const response = await fetch("/api/fishing/analyze", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(request)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                resultElement.textContent =
+                    data.message || "Помилка запиту";
+                return;
+            }
+
+            resultElement.textContent = data.recommendation;
+
+        } catch (error) {
+            resultElement.textContent =
+                "Не вдалося підключитися до сервера";
+        }
+    });
+</script>
+
+</body>
+</html>

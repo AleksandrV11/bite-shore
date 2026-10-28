@@ -123,14 +123,13 @@ public class FishingAnalysisService {
                         localDate
                 );
         // Загальний аналіз
-        String result =
-                (generalAnalyzer.analyzer(
-                        pressure,
-                        temperature,
-                        wind,
-                        precipitation,
-                        dateTime
-                )).toString();
+        List<String> result = generalAnalyzer.analyzer(
+                pressure,
+                temperature,
+                wind,
+                precipitation,
+                dateTime
+        );
         return new FishingAnalysisResponse(localDate, result);
 
     }

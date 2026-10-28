@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Bite Shore</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 5px 20px;
+        }
+        h1 {
+            text-align: center;
+            color: green
+        }
+        p{
+        text-align: center;
+        color: #b426cc;
+        margin-top: 15px;
+        font-size: 24px;
+        }
+        label {
+            display: block;
+            font-size: 22px;
+        }
+        input {
+            display: block;
+            width: 80%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            font-size: 20px;
+        }
+        label {
+             display: block;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: #4dbf4d;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 22px;
+        }
+        button:hover {
+            background-color: #b426cc;
+        }
+        #result {
+            white-space: pre-wrap;
+            margin-top: 20px;
+            padding: 0 20px;
+            background-color: #62f03729;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            line-height: 1.6;
+        }
+        .recommendation-block {
+           padding: 16px;
+           margin-bottom: 12px;
+           border: 1px solid #d5e5d0;
+           border-left: 5px solid #4caf50;
+           border-radius: 8px;
+           background-color: #f7fbf5;
+           color: #263626;
+           font-size: 17px;
+           line-height: 1.7;
+        }
+        .season-autumn {
+           background-color: #ffeb3b70;
+           border-color: #e6c49b;
+           border-left: 10px solid #e935eb;
+           color: #65421e;
+        }
+
+        .season-summer {
+           background-color: #e6362970;
+           border-color: #f0df8b;
+           border-left: 10px solid #e935eb;
+           color: #66551a;
+        }
+
+        .season-spring {
+           background-color: #04f21678;
+           border-color: #b8dfb8;
+           border-left: 10px solid #e935eb;
+           color: #28552b;
+        }
+
+        .season-card {
+            position: relative;
+            overflow: hidden;
+            padding: 30px;
+            min-height: 500px;
+            border-radius: 16px;
+            border: 1px solid #31505c;
+            background-size: cover;
+            background-position: center;
+            color: #f1f5f6;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .season-card.season-autumn {
+            background-image:
+            linear-gradient(
+                90deg,
+                rgba(4, 22, 32, 0.30) 0%,
+                rgba(4, 22, 32, 0.10) 45%,
+                rgba(4, 22, 32, 0) 100%
+            ),
+            url("images/lake-autumn.jpg");
+        }
+
+        .season-card.season-summer {
+            background-image:
+              linear-gradient(
+                90deg,
+                rgba(4, 22, 32, 0.30) 0%,
+                rgba(4, 22, 32, 0.10) 45%,
+                rgba(4, 22, 32, 0) 100%
+              ),
+            url("images/lake-summer.jpg");
+        }
+
+        .season-card.season-spring {
+            background-image:
+                linear-gradient(
+                    90deg,
+                    rgba(4, 22, 32, 0.30) 0%,
+                    rgba(4, 22, 32, 0.10) 45%,
+                    rgba(4, 22, 32, 0) 100%
+                ),
+            url("images/lake-spring.jpg");
+        }
+
+        .season-card:not(.season-autumn):not(.season-summer):not(.season-spring) {
+            background-image:
+                linear-gradient(
+                    90deg,
+                    rgba(4, 22, 32, 0.30) 0%,
+                    rgba(4, 22, 32, 0.10) 45%,
+                    rgba(4, 22, 32, 0) 100%
+                ),
+            url("images/lake-default.jpg");
+        }
+
+        .season-card h3 {
+           font-size: 50px;
+           margin: 16px;
+           text-align: center;
+        }
+
+        .season-card p {
+           font-size: 50px;
+           line-height: 1.6;
+           margin: 0;
+           text-align: center;
+        }
+        .analysis-section {
+           padding: 20px;
+           margin-top: 16px;
+           border: 1px solid #31505c;
+           border-radius: 16px;
+           background-color: #17313b;
+           color: #f1f5f6;
+           text-align: justify;
+        }
+        .compass-section h4 {
+            margin: 0 0 4px;
+            line-height: 1.2;
+             font-size: 40px;
+        }
+
+        .compass-section p {
+            margin: 0;
+            line-height: 1.2;
+            font-size: 30px;
+            margin-top: -30px !important;
+        }
+
+        .analysis-section h3 {
+           margin-top: 0;
+           margin-bottom: 16px;
+           font-size: 22px;
+           text-align: justify;
+        }
+
+        .analysis-section p {
+           margin: 0 0 12px;
+           line-height: 1.6;
+           text-align: justify;
+           text-indent: 25px;
+        }
+
+        .analysis-section ol {
+           margin: 0 0 12px;
+           padding-left: 45px;
+        }
+
+        .analysis-section li {
+           margin-bottom: 8px;
+           line-height: 1.6;
+        }
+        .analysis-section p:last-child {
+           margin-bottom: 0;
+        }
+
+        .analysis-section p:last-child {
+           margin-bottom: 0;
+           text-align: justify;
+        }
+        .compass-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+            margin: 24px 0;
+        }
+
+        .compass-card {
+            background: #17313b;
+            border: 1px solid #45616e;
+            border-radius: 16px;
+            padding: 0px 20px 4px;
+            text-align: center;
+            color: #f1f5f6;
+            margin-top: 35px;
+        }
+
+        .compass-card h3 {
+            font-size: 36px;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1;
+            background: #1dcc1d;
+        }
+        .compass-card > .compass-period {
+            margin: 0 !important;
+        }
+
+        .compass-card > h3 + .compass-period {
+            margin-top: -40px !important;
+        }
+
+        .compass-card h4 {
+            font-size: 30px;
+            margin: -15px 0 0;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .compass {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 5px auto;
+            border: 2px solid #78909c;
+            border-radius: 50%;
+            background:
+                linear-gradient(90deg, transparent 49.5%, #45616e 50%, transparent 50.5%),
+                linear-gradient(transparent 49.5%, #45616e 50%, transparent 50.5%);
+        }
+
+        .compass span {
+            position: absolute;
+            color: #f1f5f6;
+            font-weight: bold;
+        }
+
+        .compass .north {
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .compass .east {
+            right: -22px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .compass .south {
+            bottom: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .compass .west {
+            left: -22px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .compass-sector {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg 202.5deg,
+                rgba(40, 230, 100, 0.65) 202.5deg 247.5deg,
+                transparent 247.5deg 360deg
+            );
+        }
+        .compass-period {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            margin-top: 0 !important;
+        }
+
+        .compass-section {
+            text-align: center;
+            padding: 0px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        @media (max-width: 500px) {
+            .compass-period {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .compass-arrow {
+            position: absolute;
+            width: 4px;
+            height: 45%;
+            left: 50%;
+            top: 5%;
+            background: #0ee00af7;
+            border-radius: 4px;
+            transform: translateX(-50%) rotate(0deg);
+            transform-origin: 50% 100%;
+        }
+
+        .compass-arrow::before {
+            content: "";
+            position: absolute;
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 18px solid #ff0033;
+        }
+        .all-compasses {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+            margin: 24px 0;
+        }
+
+        .all-compasses > .compass-container {
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .pressure-card {
+            background: #17313b;
+            border: 1px solid #45616e;
+            border-radius: 16px;
+            padding: 0px 20px 4px;
+            text-align: center;
+            color: #f1f5f6;
+            margin-top: 55px;
+        }
+        .pressure-period {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 5px;
+            row-gap: 0;
+            margin-top: 0 !important;
+        }
+        .pressure-card h3 {
+            font-size: 36px;
+            margin: 30px 0 0 !important;
+            padding: 0 !important;
+            line-height: 1;
+            background: #1dcc1d;
+        }
+        .pressure-card > p {
+            font-size: 26px;
+            color:#53af49;
+            margin: 25px 0 25px !important;
+            padding: 0 !important;
+            line-height: 1;
+        }
+        .pressure-period p.start-pressure {
+            grid-column: 1;
+            margin: 10px !important;
+            text-align: center;
+            color: #ffeb3b;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 8px;
+        }
+
+        .pressure-period p.end-pressure {
+            grid-column: 2;
+            margin: 10px !important;
+            text-align: center;
+            color: #ffeb3b;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 8px;
+        }
+        .pressure-period p.start-pressure:nth-of-type(1) {
+            grid-row: 1;
+        }
+
+        .pressure-period p.start-pressure:nth-of-type(2) {
+            grid-row: 2;
+        }
+
+        .pressure-period p.end-pressure:nth-of-type(1) {
+            grid-row: 1;
+        }
+
+        .pressure-period p.end-pressure:nth-of-type(2) {
+            grid-row: 2;
+        }
+        .pressure-scale {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3px;
+            height: 14px;
+            margin: 20px 0 15px;
+        }
+
+        .pressure-scale div:nth-child(1) {
+            background: #d9f2c7;
+        }
+
+        .pressure-scale div:nth-child(2) {
+            background: #a8d982;
+        }
+
+        .pressure-scale div:nth-child(3) {
+            background: #65b85a;
+        }
+
+        .pressure-scale div:nth-child(4) {
+            background: #278a3e;
+        }
+
+        .pressure-period p.no-data {
+            color: #ff4d4d;
+        }
+
+        .pressure-period p.pressure-dynamic {
+            grid-column: 1 / -1;
+            color: #f44336;
+            font-size: 30px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .temperature-card {
+            background: #17313b;
+            border: 1px solid #45616e;
+            border-radius: 16px;
+            padding: 0px 20px 4px;
+            text-align: center;
+            color: #f1f5f6;
+            overflow: hidden;
+            margin-top: 55px;
+        }
+        .temperature-card h3 {
+            font-size: 36px;
+            margin: 30px 0 0 !important;
+            padding: 0 !important;
+            line-height: 1;
+            background: #1dcc1d;
+        }
+        .water-diagram {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .far-water,
+        .near-water {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .upper-layer {
+            background: #8bd8f0;
+            color: #ee33ad;
+            padding: 25px 10px;
+            text-align: center;
+            font-size: 26px;
+            white-space: pre-line;
+        }
+
+        .middle-layer {
+            background: #2787bc;
+            color: #d5e40a;
+            padding: 25px 10px;
+            text-align: center;
+            font-size: 26px;
+            white-space: pre-line;
+        }
+
+        .water-bottom {
+            background: #17608d;
+            color: #34e40a;
+            padding: 10px;
+            text-align: center;
+            font-size: 26px;
+            white-space: pre-line;
+        }
+
+        .precipitation-card {
+            margin-top: 55px;
+            padding: 20px;
+            background: #202b35;
+            border: 1px solid #465766;
+            border-radius: 14px;
+            color: #f0f4f7;
+        }
+
+        .precipitation-card h3 {
+            margin: 30 0 0px;
+            text-align: center;
+            font-size: 36px;
+            background: #1dcc1d;
+        }
+
+        .precipitation-periods {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .precipitation-period {
+            min-width: 0;
+            padding: 12px;
+            background: #2c3b47;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .precipitation-period h4 {
+            margin: 0 0 14px;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        .precipitation-far,
+        .precipitation-near {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #03a9f4;
+            color:#f40303;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 26px;
+            line-height: 1.5;
+        }
+
+        .precipitation-recommendation-far,
+        .precipitation-recommendation-near {
+            padding: 12px;
+            background: #b2df9e;
+            border-left: 3px solid #53af49;
+            border-radius: 6px;
+            color: #861e98;
+            font-size: 26px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .precipitation-periods {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        #main-cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            align-items: stretch;
+            padding: 0;
+        }
+
+        #main-cards .wind-card,
+        #main-cards .pressure-card,
+        #main-cards .temperature-card,
+        #main-cards .precipitation-card,
+        #main-cards .text-preview-card {
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            min-height: 100px;
+            margin: 0;
+            padding: 10px;
+            border: 2px solid #45616e;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        #main-cards .text-preview-card {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #17313b;
+            border: 2px solid #45616e;
+            border-radius: 12px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            #main-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        #detail-content > * {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #main-cards .wind-card h3 {
+            text-align: center;
+            font-size: 28px;
+            margin: 0 0 0;
+            color: white;
+        }
+        #main-cards .wind-card {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #45616e;
+            border-radius: 12px;
+            background: #17313b;
+            text-align: center;
+            cursor: pointer;
+        }
+        #main-cards .wind-card img {
+            display: block;
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            margin: 0 auto;
+        }
+
+        #main-cards .pressure-card {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            padding: 10px;
+            border: 2px solid #45616e;
+            border-radius: 12px;
+            background: #17313b;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #main-cards .pressure-icon {
+            display: block;
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            margin: 0 auto;
+            transform: translateY(-10px);
+        }
+
+        #main-cards .pressure-card p {
+            text-align: center;
+            font-size: 28px;
+            margin: -10px 0 0;
+            top: -10px;
+        }
+        #main-cards .pressure-card h3 {
+            text-align: center;
+            font-size: 32px;
+            margin: 0;
+            background: transparent;
+            transform: translateY(-20px);
+        }
+
+        #main-cards .temperature-card {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            padding: 10px;
+            border: 2px solid #45616e;
+            border-radius: 12px;
+            background: #17313b;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #main-cards .temperature-icon {
+            display: block;
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            margin: 0 auto;
+            transform: translateY(-10px);
+        }
+
+        #main-cards .temperature-card h3 {
+            text-align: center;
+            font-size: 28px;
+            margin: 0;
+            background: transparent;
+            transform: translateY(-10px);
+        }
+
+        #main-cards .precipitation-card {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            padding: 10px;
+            border: 2px solid #45616e;
+            border-radius: 12px;
+            background: #17313b;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #main-cards .precipitation-icon {
+            display: block;
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            margin: 0 auto;
+            transform: translateY(-10px);
+        }
+
+        #main-cards .precipitation-card h3 {
+            text-align: center;
+            font-size: 28px;
+            margin: 0;
+            background: transparent;
+            transform: translateY(-10px);
+        }
+
+        #main-cards .wind-card h3,
+        #main-cards .pressure-card h3,
+        #main-cards .temperature-card h3,
+        #main-cards .precipitation-card h3 {
+            font-family: Arial, sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            margin: 0;
+        }
+        #result {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        #main-screen {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        #main-cards {
+            margin-top: -70px !important;
+            margin-bottom: 0 !important;
+        }
+        #result > #main-screen {
+            margin: 0;
+            padding: 0;
+        }
+
+        #main-cards {
+            margin: 0;
+            padding: 0;
+        }
+        #back-button,
+        #text-back-button {
+            margin-top: 0;
+        }
+        #detail-screen {
+            margin-top: -130px;
+        }
+        #detail-screen #back-button {
+            font-size: 34px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #text-content {
+            margin-top: -30px;
+            font-size: 30px;
+        }
+        #text-screen {
+            margin-top: -180px;
+        }
+        #text-screen #text-back-button {
+            font-size: 34px;
+        }
+         #detail-content {
+    margin-top: -100px;
+}
+
+    </style>
+
+</head>
+<body>
+
+<h1>Рекомендації по вибору місця лову</h1>
+<p>Аналіз погодних умов для риболовлі</p>
+
+
+<form id="fishing-form">
+
+    <label>
+        Місто:
+        <input type="text" id="city" placeholder="Введіть місто">
+    </label>
+
+    <br><br>
+
+    <label>
+        Широта:
+        <input type="number" id="latitude" placeholder="Або назву міста, або широту.">
+    </label>
+
+    <br><br>
+
+    <label>
+        Довгота:
+        <input type="number" id="longitude" placeholder="Або назву міста, або довготу.">
+    </label>
+
+    <br><br>
+
+    <label>
+        Дата рибалки:
+        <input type="date" id="fishingDate" placeholder="Дата майбутньої рибалки.">
+    </label>
+
+    <br><br>
+
+    <button type="submit">Проаналізувати</button>
+
+</form>
+
+<h2>Результат аналізу :</h2>
+
+<div id="result">
+    <div id="main-screen">
+        <div id="main-cards"></div>
+    </div>
+
+    <div id="detail-screen" hidden>
+        <button id="back-button" type="button">
+            ← На головний екран
+        </button>
+
+        <div id="detail-content"></div>
+    </div>
+
+    <div id="text-screen" hidden>
+        <button id="text-back-button" type="button">
+            ← На головний екран
+        </button>
+
+        <div id="text-content"></div>
+    </div>
+</div>
+
+<script>
+
+
+    function createSeasonCard(item, resultElement) {
+        const block = document.createElement("div");
+        block.className = "season-card";
+        const seasonText = item.toLowerCase();
+
+        if (seasonText.includes("пізньої осені") ||
+            seasonText.includes("восени") ||
+            seasonText.includes("ранньою осінню")) {
+            block.classList.add("season-autumn");
+        } else if (seasonText.includes("влітку")) {
+            block.classList.add("season-summer");
+        } else if (seasonText.includes("весною") ||
+                   seasonText.includes("навесні")) {
+            block.classList.add("season-spring");
+        }
+        const parts = item.split(":");
+        const heading = document.createElement("h3");
+        heading.textContent = parts[0] + ":";
+
+        const text = document.createElement("p");
+        text.textContent = parts.slice(1).join(":").trim();
+        block.appendChild(heading);
+        block.appendChild(text);
+
+        resultElement.appendChild(block);
+    }
+    function getRecommendationCategory(index) {
+        if (index === 1) {
+            return "pressure";
+        } else if (index === 2) {
+            return "temperature";
+        } else if (index === 3) {
+            return "wind";
+        } else if (index === 4) {
+            return "precipitation";
+        } else {
+            return "other";
+        }
+    }
+    function appendRecommendationParagraphs(item, card) {
+        const sentences = item.split(/(?<!\d)\.\s+/);
+
+        sentences.forEach(sentence => {
+            const paragraph = document.createElement("p");
+            paragraph.textContent = sentence.trim();
+            card.appendChild(paragraph);
+        });
+    }
+    function createRecommendationCards() {
+        const sections = {
+            pressure: "Атмосферний тиск",
+            temperature: "Температура води",
+            wind: "Вітер",
+            precipitation: "Опади",
+            other: "Інші рекомендації"
+        };
+
+        const cards = {};
+
+        for (const key in sections) {
+            const card = document.createElement("div");
+            card.className = "analysis-section";
+
+            const heading = document.createElement("h3");
+            heading.textContent = sections[key];
+
+            card.appendChild(heading);
+            cards[key] = card;
+        }
+       return { sections, cards };
+    }
+    function renderRecommendations(recommendations, resultElement, cards) {
+        recommendations.forEach((item, index) => {
+            if (index === 0) {
+                createSeasonCard(item, resultElement);
+            } else {
+                const category = getRecommendationCategory(index);
+                appendRecommendationParagraphs(item, cards[category]);
+            }
+        });
+    }
+    function renderCompasses(windData, resultElement) {
+        const allCompassContainer = createCompassContainer(windData);
+        resultElement.appendChild(allCompassContainer);
+
+        const strongWindContainer = createStrongWindContainer(
+            windData.farStrongWindDirection,
+            windData.nearStrongWindDirection
+        );
+
+        if (strongWindContainer) {
+            resultElement.appendChild(strongWindContainer);
+        }
+
+        return allCompassContainer;
+    }
+    function renderRecommendationCards(sections, cards, resultElement) {
+        for (const key in sections) {
+            if (cards[key].children.length > 1) {
+                resultElement.appendChild(cards[key]);
+            }
+        }
+    }
+    function createFishingRequest() {
+        return {
+            latitude: Number(document.getElementById("latitude").value),
+            longitude: Number(document.getElementById("longitude").value),
+            city: document.getElementById("city").value,
+            fishingDate: document.getElementById("fishingDate").value
+        };
+    }
+    async function sendFishingRequest(request) {
+        const response = await fetch("/api/fishing/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(request)
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || "Помилка запиту");
+        }
+
+        return data;
+    }
+    function displayFishingResults(data, resultElement) {
+        resultElement.querySelector("#main-cards").innerHTML = "";
+        resultElement.querySelector("#detail-content").innerHTML = "";
+        resultElement.querySelector("#text-content").innerHTML = "";
+
+        const mainCards = resultElement.querySelector("#main-cards");
+        const detailContent = resultElement.querySelector("#detail-content");
+        const textContent = resultElement.querySelector("#text-content");
+
+        const { sections, cards } = createRecommendationCards();
+
+        renderRecommendations(data.recommendation, textContent, cards);
+        const windText = data.recommendation[3];
+        const windData = parseWindData(windText);
+
+        const windPreviewCard = createWindPreviewCard(windData);
+        mainCards.appendChild(windPreviewCard);
+
+        const allCompassContainer = renderCompasses(
+            windData,
+            document.createElement("div")
+        );
+
+        highlightCompassDirections(allCompassContainer);
+        setWindCompassAngles(allCompassContainer);
+
+        windPreviewCard.addEventListener("click", () => {
+            showCardDetails(allCompassContainer);
+        });
+        const pressureText = data.recommendation[1];
+        const pressureData = parsePressureData(pressureText);
+
+        const pressureCard = createPressurePreviewCard();
+        mainCards.appendChild(pressureCard);
+
+        pressureCard.addEventListener("click", () => {
+           const pressureDetails = createPressureCard(pressureData);
+           showCardDetails(pressureDetails);
+        });
+        const temperatureText = data.recommendation[2];
+        const temperatureData = parseTemperatureData(temperatureText);
+
+        console.log("Текст про температуру:", temperatureText);
+        console.log("Розібрані дані температури:", temperatureData);
+
+        const temperatureCard = createTemperaturePreviewCard();
+        mainCards.appendChild(temperatureCard);
+
+        temperatureCard.addEventListener("click", () => {
+            const temperatureDetails = createTemperatureCard(temperatureData);
+            showCardDetails(temperatureDetails);
+        });
+        const precipitationText = data.recommendation[4];
+        const precipitationData = parsePrecipitationData(precipitationText);
+
+        console.log("Текст про опади:", precipitationText);
+        console.log("Розібрані дані опадів:", precipitationData);
+
+        const precipitationCard = createPrecipitationPreviewCard();
+        mainCards.appendChild(precipitationCard);
+
+        precipitationCard.addEventListener("click", () => {
+            const precipitationDetails =
+                createPrecipitationCard(precipitationData);
+
+            showCardDetails(precipitationDetails);
+        });
+        const textPreviewCard = document.createElement("div");
+        textPreviewCard.className = "text-preview-card";
+        textPreviewCard.textContent = "Текстовий варіант";
+
+        mainCards.appendChild(textPreviewCard);
+        textPreviewCard.addEventListener("click", showTextDetails);
+        renderRecommendationCards(sections, cards, textContent);
+    }
+    function showWindDetails() {
+        const mainScreen = document.getElementById("main-screen");
+        const textScreen = document.getElementById("text-screen");
+        const detailScreen = document.getElementById("detail-screen");
+
+        mainScreen.hidden = true;
+        textScreen.hidden = true;
+        detailScreen.hidden = false;
+    }
+    function showTextDetails() {
+        document.getElementById("main-screen").hidden = true;
+        document.getElementById("detail-screen").hidden = true;
+        document.getElementById("text-screen").hidden = false;
+    }
+    function showDetailScreen() {
+        document.getElementById("main-screen").hidden = true;
+        document.getElementById("text-screen").hidden = true;
+        document.getElementById("detail-screen").hidden = false;
+    }
+    function showMainScreen() {
+        document.getElementById("detail-screen").hidden = true;
+        document.getElementById("text-screen").hidden = true;
+        document.getElementById("main-screen").hidden = false;
+    }
+    function showCardDetails(cardContent) {
+        const detailContent = document.getElementById("detail-content");
+
+        detailContent.innerHTML = "";
+        detailContent.appendChild(cardContent);
+
+        showDetailScreen();
+    }
+    document.getElementById("back-button").addEventListener("click", showMainScreen);
+    document.getElementById("text-back-button").addEventListener("click", showMainScreen);
+
+    document.getElementById("fishing-form").addEventListener("submit", async function (event) {
+
+       event.preventDefault();
+
+       const request = createFishingRequest();
+       const resultElement = document.getElementById("result");
+       resultElement.querySelector("#main-cards").innerHTML = "Аналізую...";
+
+       try {
+           const data = await sendFishingRequest(request);
+           displayFishingResults(data, resultElement);
+
+       } catch (error) {
+           console.error(error);
+           resultElement.textContent =
+               "Помилка: " + error.message;
+       }
+   });
+</script>
+<script src="wind.js"></script>
+<script src="pressure.js?v=2"></script>
+<script src="temperature.js?v=2"></script>
+<script src="precipitation.js?v=2"></script>
+</body>
+</html>

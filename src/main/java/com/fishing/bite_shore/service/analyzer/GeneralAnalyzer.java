@@ -3,23 +3,21 @@ package com.fishing.bite_shore.service.analyzer;
 import com.fishing.bite_shore.model.analysis.precipitation.PrecipitationLevel;
 import com.fishing.bite_shore.model.analysis.precipitation.PrecipitationState;
 import com.fishing.bite_shore.model.analysis.pressure.PressureLevel;
-import com.fishing.bite_shore.model.analysis.pressure.PressureMovement;
 import com.fishing.bite_shore.model.analysis.pressure.PressureState;
 import com.fishing.bite_shore.model.analysis.pressure.PressureTrend;
 import com.fishing.bite_shore.model.analysis.temperature.HeatLevel;
 import com.fishing.bite_shore.model.analysis.temperature.TemperatureState;
 import com.fishing.bite_shore.model.analysis.temperature.WaterTrend;
-import com.fishing.bite_shore.model.analysis.wind.Wind;
 import com.fishing.bite_shore.model.analysis.wind.WindDirection;
 import com.fishing.bite_shore.model.analysis.wind.WindState;
 import com.fishing.bite_shore.model.analysis.wind.WindStrength;
 import com.fishing.bite_shore.model.season.Season;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.MonthDay;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,18 +25,19 @@ import java.util.Optional;
 public class GeneralAnalyzer {
 
 
-    public StringBuilder analyzer(PressureState pressureState, TemperatureState temperatureState, WindState windState, PrecipitationState precipitationState, LocalDateTime date) {
-        StringBuilder finalAnswer = new StringBuilder();
-        finalAnswer.append(analyzeSeasonAndRecommend(date))
-                .append(getAnalizePressure(pressureState))
-                .append(getTemperatureAnalysis(temperatureState))
-                .append(getWindAnalysis(windState))
-                .append(getPrecipitationAnalysis(precipitationState, date));
+    public List<String> analyzer(PressureState pressureState, TemperatureState temperatureState, WindState windState,
+                                 PrecipitationState precipitationState, LocalDateTime date) {
+        List<String> finalAnswer = new ArrayList<>();
+        finalAnswer.add(analyzeSeasonAndRecommend(date));
+        finalAnswer.add(getAnalizePressure(pressureState));
+        finalAnswer.add(getTemperatureAnalysis(temperatureState));
+        finalAnswer.add(getWindAnalysis(windState));
+        finalAnswer.add(getPrecipitationAnalysis(precipitationState, date));
 
         return finalAnswer;
     }
 
-    private StringBuilder analyzeSeasonAndRecommend(LocalDateTime date) {
+    private String analyzeSeasonAndRecommend(LocalDateTime date) {
 
         StringBuilder result = new StringBuilder();
         MonthDay day = MonthDay.from(date);
@@ -57,17 +56,18 @@ public class GeneralAnalyzer {
         } else if (season == Season.EARLY_AUTUMN) {
             result.append("ранньою осінню. Риба активно харчується.\n");
         } else if (season == Season.AUTUMN) {
-            result.append("восені. Риба починає скочуватися на глибини, але в сонячні дні можливі виходи на неглибокі" + " ділянки.\n");
+            result.append("восени. Риба починає скочуватися на глибини, але в сонячні дні можливі виходи на " +
+                    "неглибокі" + " ділянки.\n");
         } else if (season == Season.LATE_AUTUMN) {
             result.append("пізньої осені. Риба скотилась на глибину.\n");
         } else {
             result.append("період не аналізується.\n");
         }
 
-        return result;
+        return result.toString();
     }
 
-    private StringBuilder getAnalizePressure(PressureState pressureState) {
+    private String getAnalizePressure(PressureState pressureState) {
 
         StringBuilder pressure = new StringBuilder();
 
@@ -88,7 +88,9 @@ public class GeneralAnalyzer {
             pressure.append("Наприкінці періоду він став ")
                     .append(pressureState.getEndPressure())
                     .append(", що свідчить про те, що : ")
-                    .append(getPressureLevelDescription(pressureState.getPressureLevel()));
+                    .append(getPressureLevelDescription(
+                            pressureState.getEndPressure(),
+                            pressureState.getNormPressure()));
 
             pressure.append("Зміна тиску протягом останньої доби: ");
             if (pressureState.getPressureTrend() == PressureTrend.FALLING) {
@@ -96,9 +98,9 @@ public class GeneralAnalyzer {
             } else if (pressureState.getPressureTrend() == PressureTrend.RISING) {
                 pressure.append("Тиск зростає.\n");
             } else {
-                if (pressureState.getPressureLevel() == PressureLevel.HIGH) {
+                if (pressureState.getEndPressure() > pressureState.getNormPressure() + 3) {
                     pressure.append("Тиск сформувався на високому рівні.\n");
-                } else if (pressureState.getPressureLevel() == PressureLevel.LOW) {
+                } else if (pressureState.getEndPressure() < pressureState.getNormPressure() - 3) {
                     pressure.append("Тиск сформувався на низькому рівні.\n");
                 } else {
                     pressure.append("Тиск сформувався на нормальному рівні.\n");
@@ -107,15 +109,16 @@ public class GeneralAnalyzer {
 
         }
 
-        return pressure;
+        return pressure.toString();
     }
 
 
-    private StringBuilder getTemperatureAnalysis(TemperatureState temperature) {
+    private String getTemperatureAnalysis(TemperatureState temperature) {
 
         StringBuilder result = new StringBuilder();
-        if (temperature.getFarPeriodDays() == 0) {
-            result.append("Данних по температурі за 3 дні до рибалки намає.\n ");
+        if (temperature.getFarPeriodDays() == 0
+         || temperature.getTemperatureFarPeriod() == null) {
+            result.append("Данних по температурі за 3 дні до рибалки немає.\n ");
         } else {
             result.append("Температура верхнього шару води за дальній період БЕЗ ВПЛИВУ ВІТРА І ОПАДІВ приблизно ")
                     .append(temperature.getTemperatureFarPeriod().getUpperLayerState().getHeadTemp())
@@ -149,23 +152,23 @@ public class GeneralAnalyzer {
             }
         }
         if (temperature.getNearPeriodDays() == 0) {
-            result.append("Данних по температурі за день до рибалки намає.\n ");
+            result.append("Данних по температурі за день до рибалки немає.\n ");
         } else {
             result.append("Температура верхнього шару води за день до рибалки приблизно ")
                     .append(temperature.getTemperatureNearPeriod().getUpperLayerState().getHeadTemp())
                     .append(" градусів,\n").append("тобто верхній шар ")
-                    .append(getTemperatureWaterLevel(temperature.getTemperatureFarPeriod().getUpperLayerState().getHeatLevel()));
+                    .append(getTemperatureWaterLevel(temperature.getTemperatureNearPeriod().getUpperLayerState().getHeatLevel()));
 
             result.append("Температура середнього шару води за день до рибалки приблизно ")
-                    .append(temperature.getTemperatureFarPeriod().getMiddleLayerState().getHeadTemp())
-                    .append(" градусів,\n").append("тобто середній шар ")
-                    .append(getTemperatureWaterLevel(temperature.getTemperatureFarPeriod().getMiddleLayerState().getHeatLevel()));
+                    .append(temperature.getTemperatureNearPeriod().getMiddleLayerState().getHeadTemp())
+                    .append(" градусів,\n").append("тобто середній шар за день до рибалки ")
+                    .append(getTemperatureWaterLevel(temperature.getTemperatureNearPeriod().getMiddleLayerState().getHeatLevel()));
         }
 
-        return result;
+        return result.toString();
     }
 
-    private StringBuilder getWindAnalysis(WindState wind) {
+    private String getWindAnalysis(WindState wind) {
 
         StringBuilder result = new StringBuilder();
 
@@ -208,11 +211,11 @@ public class GeneralAnalyzer {
 
         Optional.ofNullable(coldOrStrongWind(wind)).ifPresent(result::append);
 
-        return result;
+        return result.toString();
     }
 
 
-    private StringBuilder getPrecipitationAnalysis(PrecipitationState precipitation, LocalDateTime date) {
+    private String getPrecipitationAnalysis(PrecipitationState precipitation, LocalDateTime date) {
 
         StringBuilder result = new StringBuilder();
 
@@ -224,14 +227,14 @@ public class GeneralAnalyzer {
             }
         }
         if ((precipitation.getDayMinus1() != null && precipitation.getDayMinus1().getPrecipitation() > 0)) {
-            result.append("За день до рибалкі були : ");
+            result.append("За день до рибалки були : ");
             result.append(getPrecipitationDescription(precipitation.getDayMinus1().getLevel()));
             if (analyzeSeason(date) == Season.SUMMER) {
                 result.append("Опади збагачують киснем воду і риба " + "стає активніша.\n ");
             }
         }
 
-        return result;
+        return result.toString();
     }
 
     private String getPrecipitationDescription(PrecipitationLevel precipitation) {
@@ -276,10 +279,10 @@ public class GeneralAnalyzer {
         StringBuilder result = new StringBuilder();
 
         if ((wind.getFarWind().getWindDirection() == WindDirection.N || wind.getFarWind().getWindDirection() == WindDirection.NE || wind.getFarWind().getWindDirection() == WindDirection.NW) && wind.getFarWind().getStrenght() > 7) {
-            result.append("Стосовно спокою від вітру у дальньму періоді це берег : ").append(getDirectory(wind.getFarWind().getWindDirection())).append(".\n");
+            result.append("Стосовно спокою від вітру у дальньому періоді це берег : ").append(getDirectory(wind.getFarWind().getWindDirection())).append(".\n");
         }
         if (((wind.getNearWind().getWindDirection() == WindDirection.N || wind.getNearWind().getWindDirection() == WindDirection.NE || wind.getNearWind().getWindDirection() == WindDirection.NW) && wind.getNearWind().getStrenght() > 7) || wind.getNearWind().getStrenght() > 9) {
-            result.append("Стосовно спокою від вітру у короткому періоді риба може перемещатись на берег : ").append(getDirectory(wind.getNearWind().getWindDirection())).append(".\n");
+            result.append("Стосовно спокою від вітру у короткому періоді риба може переміщатись на берег : ").append(getDirectory(wind.getNearWind().getWindDirection())).append(".\n");
         }
 
         return result;
@@ -311,7 +314,8 @@ public class GeneralAnalyzer {
     private String getEffectOnHeadLayers(WindDirection windDirection, int strenght) {
         if ((windDirection == WindDirection.N || windDirection == WindDirection.NE || windDirection == WindDirection.NW)) {
             if (strenght > 4) {
-                return "Оскільки вітер був близько -> Пінічний і його сила була більше 4 то вітер охолонив " + "верхній шар.\n";
+                return "Оскільки вітер був близько -> Північний і його сила була більше 4 то вітер охолонив " +
+                        "верхній шар.\n";
             }
         }
         if ((windDirection == WindDirection.S || windDirection == WindDirection.SE || windDirection == WindDirection.SW)) {
@@ -326,7 +330,8 @@ public class GeneralAnalyzer {
     private String getEffectiveMiddleLayer(WindDirection windDirection, int strenght) {
         if ((windDirection == WindDirection.N || windDirection == WindDirection.NE || windDirection == WindDirection.NW)) {
             if (strenght > 7) {
-                return "Оскільки вітер був близько -> Пінічний і його сила була більше 7 то вітер міг вплинути " + "на середній шар охолоджуючи його.\n";
+                return "Оскільки вітер був близько -> Північний і його сила була більше 7 то вітер міг вплинути " +
+                        "на середній шар охолоджуючи його.\n";
             }
             if ((windDirection == WindDirection.S || windDirection == WindDirection.SE || windDirection == WindDirection.SW)) {
                 if (strenght < 8) {
@@ -363,7 +368,7 @@ public class GeneralAnalyzer {
         } else if (windDirection == WindDirection.SE) {
             return "Південно - східний. ";
         } else if (windDirection == WindDirection.S) {
-            return "Південно - східний. ";
+            return "Південний. ";
         } else if (windDirection == WindDirection.SW) {
             return "Південно - західний. ";
         } else if (windDirection == WindDirection.W) {
@@ -400,6 +405,15 @@ public class GeneralAnalyzer {
         }
 
         return "Даних по тиску за аналізований період немає.\n";
+    }
+    private String getPressureLevelDescription(int pressure, int normalPressure) {
+        if (pressure > normalPressure + 3) {
+            return "Тиск був високий.\n";
+        } else if (pressure < normalPressure - 3) {
+            return "Тиск був занизький.\n";
+        } else {
+            return "Тиск був у межах норми.\n";
+        }
     }
 
 
