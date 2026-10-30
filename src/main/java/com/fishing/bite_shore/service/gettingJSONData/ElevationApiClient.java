@@ -16,10 +16,9 @@ public class ElevationApiClient {
             return webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .scheme("https")
-                            .host("api.open-meteo.com")
-                            .path("/v1/elevation")
-                            .queryParam("latitude", lat)
-                            .queryParam("longitude", lon)
+                            .host("api.opentopodata.org")
+                            .path("/v1/srtm90m")
+                            .queryParam("locations", lat + "," + lon)
                             .build())
                     .retrieve()
                     .bodyToMono(ElevationDTO.class)
