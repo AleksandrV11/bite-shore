@@ -1008,7 +1008,7 @@
         };
     }
     async function sendFishingRequest(request) {
-        const response = await fetch("/api/fishing/analyze", {
+        const response = await fetch("https://bite-shore.onrender.com/api/fishing/analyze", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -1139,6 +1139,13 @@
 
        const request = createFishingRequest();
        const resultElement = document.getElementById("result");
+
+
+
+console.log("resultElement:", resultElement);
+console.log("main-cards:", resultElement.querySelector("#main-cards"));
+
+
        resultElement.querySelector("#main-cards").innerHTML = "Аналізую...";
 
        try {

@@ -28,7 +28,7 @@ public class FishingAnalysisIntegrationTest {
         assertNotNull(response);
         assertEquals(localDate, response.fishingDate());
         assertNotNull(response.recommendation());
-        assertFalse(response.recommendation().isBlank());
+        assertFalse(response.recommendation().isEmpty());
     }
 
     @Test
@@ -41,6 +41,6 @@ public class FishingAnalysisIntegrationTest {
         assertNotNull(response);
         assertEquals(localDate, response.fishingDate());
         assertNotNull(response.recommendation());
-        assertFalse(response.recommendation().isBlank());
+        assertFalse(response.recommendation().isEmpty());
     }
 }

@@ -43,7 +43,7 @@ public class BiteShoreApplication {
 
         String date = "2026-09-29";
         System.out.println(" Дата риболовлі : " + date);
-        LocalDate fishingDate = LocalDate.of(2026, 9, 29);
+        LocalDate fishingDate = LocalDate.now().plusDays(5);
 
         FishingAnalysisService fishingAnalysisService =
                 context.getBean(FishingAnalysisService.class);
