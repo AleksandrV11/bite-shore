@@ -39,17 +39,17 @@ public class BiteShoreApplication {
         //ЗМІНА КІЛЬКОСТІ ДНІВ ДЛЯ АНАЛІЗУ У WeatherHistoryService   А САМЕ LocalDateTime from = localDate.minusDays(4L);
 // якщо подивитись базові данні та це в   service.parser.WeatherService.getParsDTOCity або getParsDTOCoord
         ConfigurableApplicationContext context = SpringApplication.run(BiteShoreApplication.class, args);
-        String nameCity = "ГОРОДКІВКА";
-
-        String date = "2026-09-29";
-        System.out.println(" Дата риболовлі : " + date);
-        LocalDate fishingDate = LocalDate.now().plusDays(5);
-
-        FishingAnalysisService fishingAnalysisService =
-                context.getBean(FishingAnalysisService.class);
-
-
-        System.out.println(fishingAnalysisService.analyze(48.1280973, 34.0656450, nameCity, fishingDate).recommendation());
+//        String nameCity = "ГОРОДКІВКА";
+//
+//        String date = "2026-09-29";
+//        System.out.println(" Дата риболовлі : " + date);
+//        LocalDate fishingDate = LocalDate.now().plusDays(5);
+//
+//        FishingAnalysisService fishingAnalysisService =
+//                context.getBean(FishingAnalysisService.class);
+//
+//
+//        System.out.println(fishingAnalysisService.analyze(48.1280973, 34.0656450, nameCity, fishingDate).recommendation());
 
     }
 
