@@ -89,9 +89,6 @@ function parseTemperatureData(temperatureText) {
 
        const farUpperLayer = document.createElement("div");
        farUpperLayer.className = "upper-layer";
-       const nearTitle = document.createElement("h4");
-       nearTitle.textContent = "Ближній період (за день до рибалки)";
-       nearWater.appendChild(nearTitle);
 
        farUpperLayer.textContent = !temperatureData.notDataFarPeriod
            ? `Верхній шар (0 м. - до 1,5 м.): ${temperatureData.upperWaterTemperatureFarPeriodMatch}°C
@@ -117,6 +114,10 @@ function parseTemperatureData(temperatureText) {
 
        const nearWater = document.createElement("div");
        nearWater.className = "near-water";
+
+       const nearTitle = document.createElement("h4");
+       nearTitle.textContent = "Ближній період (за день до рибалки)";
+       nearWater.appendChild(nearTitle);
 
        const nearUpperLayer = document.createElement("div");
        nearUpperLayer.className = "upper-layer";
